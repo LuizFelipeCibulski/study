@@ -1,0 +1,47 @@
+101.1 - Identificar e editar configurações de hardware
+
+Existem duas maneiras básicas de identificar recursos de hardware dentro de um sistema Linux: utilizando comandos específicos ou lendo arquivos dentro de sistemas de arquivos especiais
+São dois os comandos fundamentais que identificam a presença de dispositivos:
+$ lspci
+  - Mostra todos os componentes conectados ao barramento PCI, como controladoras de disco, placas externas, controladoras UUSB, placas integradas etc.
+$ lsusb
+  - Mostra os dispositivos USB conectados à máquina.
+Os comandos lspci e lsusb mostram uma lista de todos os dispositivos no barramento PCI e USB cuja presença foi identificada pelo sistema operacional. Entretando isso não quer dizer que o componente está funcionando, pois para cada componente de hardware é necessário um componente de software (módulo) que controla o dispositivo correspondete.
+Os módulos do Linux também podem ser chamados de drivers, geralmente disponibilizados pelos próprios desenvolvedores do Linux.
+ Opções do lspci:
+ -s - Seleciona um dispositivo.
+ -v - Mostra informações detalhadas de todos os dispositivos.
+ -k - Mostra o drive em utilização
+ O lsusb é semelhante ao lspci.
+ -v - Exibe mais detalhes sobre os dispositivos.
+ -d - Seleciona um dispositivo específico pelo ID.
+ -t - Exibe os dispositivos USB em uma árvore hierárquica.
+
+ O comando lsmod lista todos os módulos atualmente carregados, a saída do comando lsmod é dividida em três colunas:
+Module - Nome do módulo.
+Size - Memória ocupada pelo módulo, em bytes.
+Used by - Módulo dependetes.
+O comando modprobe pode ser utilizado tanto para carregar quanto para descarregar módulos do kernel.
+ Para descarregar um módulo é usado modprobe -r.
+Usando como argumento apenas o nome do módulo, o comando modinfo mostra a descrição, o arquivo, o autor, a licença, a identificação, as depndências e os parânebtris oara o módulo solicitado.
+As opções para cada módulo podem ser aplicadas de modo permanente usando-se o arquivo de configuração /etc/modprobe.conf ou em arquivos individuais terminados em .conf no diretório /etc/modprobe.d/
+Caso exista problema de compatibilidade, o arquivo /etc/modprobe.d/blacklist.conf pode ser utilizado para bloquear o carregamento do módulo em questão.
+
+Os comandos informados a cima servem como facilitadores de leitura das informações de hardware armazenadas pelo sistema. Essas informações ficam em arquivos especiais localizados nos diretórios /proc e /sys
+O /proc contém arquivos com informações dos processos ativos e de recursos de hardware.
+/proc/cpuinfo
+ - Informações sobre o(s) procecssador(es) encontrados pelo sistema.
+/proc/dma
+ - Informações sobre os canais de acesso direto à memória.
+/proc/ioports
+ - Informações sobre endereços de memória usados pelos dispositivos.
+/proc/interrupts
+ - Informação sobre as requisições de interrupção (IRQ) nos processadores.
+
+Os arquivos em /sys têm função semelhante aos do /proc. Poém, o diretório /sys tem a função específica de armazenar informações de dispositivos, enquanto o /proc agrega também muitas informações de processos.
+/dev encontramos arquivos especiais que representam a maioria dos dispositivos do sistema, particularmente dispositivos de armazenamento.
+Dispositivos removíveis são tratados pelo subsistema udev, que atualiza os arquivos correspondetes em /dev.
+Nos sistemas atuais, o udeb é reponsável por identificar e configurar tanto os dispositivos presentes desde o ligamento da máquina (coldplug) qaunto os dispositivos conectados com o computador em funcionamento (hotplug). Informações de identificação dos dispositivos ficam armazenadas em um sustema de arquivos lógico chamado SysFS, que é montado em /sys
+
+Dispositivos de armazenamento
+Também conhecidos como dispositivos de bloco. Esse termo se da pela maneira que os dados são lidos e escritos: em blocos de diferentes tamanhos e alinhamentos. 
