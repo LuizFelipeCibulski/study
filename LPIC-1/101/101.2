@@ -1,0 +1,16 @@
+101.2 Início (boot) do sistema
+
+Para que possa controlar o computador, o componente central do sistema operacional, o kernel, precisa ser carregado por um programa chamado carregador de boot, que por sua vez é invocado pelo BIOS ou pleo UEFI. O carregador de boot é configurável e pode passar opções para o kernel, tais como qual partição contém os arquivos do sistema operacional ou se o sistema deve iniciar no modo de manutenção. Logo depois de carregado, o kernel dá continuidade ao processo de boot, identificando os dispositivos fundamentais e acionando o inicializador dos componenentes do sistema.
+O BIOs espera que os primeiros 440 bytes no primeiro dispositivos de armazenamento contenha o estágio inicial do carregador de boot. Esses 440 bytes são chamados de MBR.
+Em resumo:
+1. O processo POST (power-on-self-test) é executado assim que a máquina é ligada para identificar erros baśicos de hardware.
+2. O BIOS ativa os dispositivos necessários para o carregamento do sistema, como monitor, teclado e dispositivos de armazenamento. 
+3. O BIOS carrega o primeiro estágio do carregador de boot (bootloader) a partir da MBR (os primeiros 440 bytes no primeiro dispositivo de armazenamento, conforme a ordem de boot definida pelo BIOS).
+4. O primeiro estágio invoca o segunda estágio do bootloader, responsável por apresentar as opções de boot e carregar o kernel.
+
+Em linhas gerais, as etapas de inicialização pré-sistema operacional em um sistema com UEFI são:
+1. O processo de POST (power-on-self-test) é executado assun qye a náquina é ligada, para identificar erros básicos de hardware.
+2. O UEFI ativa os dispositivos necessários para o carregamento do sistema, como monitor, teclado e dispositivos de armazenamento.
+3. O firmware do UEFI lê as definições armazenadas na NVRAM para localizar o sistema de arquivos da partição ESP e executar o aplicativo EFI predefinido. normalmente o promeiro estágio do carregador de boot.
+4. Se o aplicativo EFI predefinido for um bootloader,, o kernel do sistema será carregado para iniciar o sistema operacional. 
+
