@@ -14,3 +14,23 @@ Em linhas gerais, as etapas de inicialização pré-sistema operacional em um si
 3. O firmware do UEFI lê as definições armazenadas na NVRAM para localizar o sistema de arquivos da partição ESP e executar o aplicativo EFI predefinido. normalmente o promeiro estágio do carregador de boot.
 4. Se o aplicativo EFI predefinido for um bootloader,, o kernel do sistema será carregado para iniciar o sistema operacional. 
 
+Carregador de BOOT
+
+Grub é o bootloader mais utilizado em sistemas Linux.
+Pelo menu do Grub é possivel escolher qual dos kernels instalados deve ser carregado e passar novos parâmetros para o kernel. A maioria dos parâmentros obedece ao formato item=valor.
+Para que uma alteração de parametros sejá permanente é necessario alterar o arquivo /etc/default/grub na linha GRUB_CMDLINE_LINUX. Assim que esse arquivo foi alterado é necessario carregar um novo arquivo de configuração com o comando grub-mkconfig -o /boot/grub/grub.cfg.
+Caso o sistema já esteja carregado, os parâmentros que foram passados para o kernel podem ser consultados no arquivo /proc/cmdline.
+
+Inicialização do sistema
+
+Os scripts de inicialização são responsáveis por executar alguma operação somente durante o processo de inicialização do sistema.
+Já os serviços, também conhecidos como daemons, ficam ativos durante todo o tempo em que o sistema operacional está em funcionamento, pois são responsáveis por aspectos intrícisecos ao sistema operacional.
+O processo de inicialização do sistema operacional começa assim que o bootloader carrega o kernel na memória. O kernel assumirá o controle do computador e configurará os recursos básicos do sistema operacional, como a configuração dos componentes fundamentais de hardware e a paginação de memória.
+Em seguida, o kernel abre o initramfs( initial RAM filesystem). A initramfs pe um arquivo compactado que contém um sistema de arquivos utilizado temporariamente como sistema de arquivo-raiz durante a inicialização do sistema. A princiapl finalidade da initramfs é fornecer os módulos necessários para o kernel acessar o sistema de arquivos-raix do sistema operacional.
+Assim que o sistema de arquivos-raiz do sistema operacinal estiver disponível, o kernel monta as demais partições indicadas no arquivo /etc/fstab e invoca o inicializador do sistema, um programa chamado init. O init é o responsável por executar os scripts de inicialização e os daemons do sistema. Existem outros programas com a mesma finalidade do init, mas são implementados de modo distinto, como o systemd e o Upstart.
+
+Inspeção da inicialização.
+
+Kernel ring buffer é um espaço de memória que armazena as mensagens emitidas diretamente pelo kernel, inclusive durante a inicialização, mesmo que estas tenham sido ocultadas por umma imagem ou animação de carregamento. Pode ser consultado usando o comando dmesg e em sistemas que utilizam o systemd, também pode ser utilizado o comando journalctl com a opção -b, --boot, -k ou --dmesg. 
+O kernel ring buffer é zerado sempre que o sistema é reiniciado, mas pode ser deliberadamente zerado com o comando dmesg --clear.
+As mensagens de inicialização e outras informações emitidas pelo sistema operacional são armazenadas em arquivos no diretório /var/log.
