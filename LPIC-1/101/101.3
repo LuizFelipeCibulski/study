@@ -1,0 +1,21 @@
+101.3 Alternar runlevels/boot targets, desligar e reiniciar o sistema
+
+O inicializador do sistema, ou simplesmente init, é o processo responsável por controlar os serviços (daemons) do sistema.
+O controle dos serviços pode ser feito por meio de scripts do shell ou por um programa que interpreta arquivos de configuração.
+Primeiro método é o SysVinit.
+Segundo método é o systemd e pelo Upstart.
+Historicamente, o inicializador SysV foi mais utilizado por distribuições Linux. Hoje é mais comum encontrar o systemd como o inicializador padrão na maioria das distribuições.
+
+SysVinit 
+
+O SysVinit controla quais daemons e recursos devem estar ativos usando o conceito de runlevels. O programa responsável por gerir os runlevels e daemons/recursos correspondentes é o /sbin/init. 
+Durante o processo de inicialização o init identifica o runlevel informado no carregamento do kernel ou no arquivo /etc/inittab e carrega scripts correspondetes.
+Na maioria das distribuições SysVinit, os scripts invocados pelo init ficam no diretório /etc/init.d/
+Os runlevels são numerados de 0 a 6 e têm os seguintes propósitos:
+0 - Desligamento do sistema
+1, s ou single - Modo de usuário único, sem rede ou outros recursos não fundamentais (modo de manutençã)
+2,3 e 4 - Modo multiusuário. Usuários podem entrar no sistema via console ou via rede. Os runlevels 2 e 4 nem sempre são utilizados.
+5 - Modo multiusuário. Equivalente ao runlevel 3, mais o login em modo gráfico.
+6- Reinicialização do sistema.
+
+Os únicos runlevels comuns entre todas as distribuições são o 0,1 e 6.
