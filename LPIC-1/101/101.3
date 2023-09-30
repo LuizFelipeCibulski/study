@@ -19,3 +19,29 @@ Os runlevels são numerados de 0 a 6 e têm os seguintes propósitos:
 6- Reinicialização do sistema.
 
 Os únicos runlevels comuns entre todas as distribuições são o 0,1 e 6.
+
+O arquivo /etc/inittab é utilizado para armazenar o runlevel padrão, o número do runlevel nunca pode ser 0 ou 6, pois causaria o desligamento ou a reinicialização logo durante o boot.
+Os scripts utilizados pelo init para configurar cada runlevel são armazenados no diretório /etc/init.d/. Cada runlevel tem um diretório associado em /etc/, nomeados como /etc/rc0.d/ ...
+Como um mesmo script pode ser invocado para diferentes níveis de execução, os arquivos nesses diretórios apenas indicam o caminho para o verdadeiro arquivo em /etc/init.d/.
+O comando telinit q deve ser executado sempre que o arquivo /etc/initab for alterado. O argumento q determina que a configuração seja recarregada.
+Para identificar em qual runlevel o sistema está operando, é utilizado o comando runlevel. O comando runlevel mostra dois algarismos: o primeiro mostra o runlevel anterior, e o segundo mostra o runlevel atual.
+
+Systemd
+
+O Systemd é um gerenciado de sistema e serviços modernizado, porém mantém compatibilidade com os comandos e níveis de execução do padrão SysV. o systemd utiliza ativação de serviços por sockets e D-Bus.
+O systemd inicia e supervisiona todos os serviços do sistema baseando-se no conceito de unidades(units). Uma unidade é composta por um nome e um tipo e tem um arquivo de configuração correspondete.
+Existem sete tipos de unidades:
+service
+ - O tipo mais comum, onde serviços podem ser iniciados, interrompidos, reiniciados e recarregados.
+socket
+ - Esse tipo de unidade pode ser um socket no sistema de arquivos ou na rede. Cada unidade do tipo socket tem uma unidade do tipo service correspondentem que é iniciada somente quando uma requisição chega à unidade socket.
+device
+ - Uma unidade para um dispositvo presente na árvore de dispositivos identificados pelo Linux. Um dispositivo é exposto como unidade do systemd se houver uma regra do udev com essa finalidade. Propriedades definidas na regra udedv podem ser utilizadas como configurações para definir dependências em unidades de dispositivos.
+mount
+ - Um ponto de montagem no sistema de arquivos, semelhante a uma entrada em /etc/fstab
+automount
+ - Um ponto de montagem automático no sistema de arquivos. Cada unidade automount tem uma unidade mount correspondete, que é iniciada quando o ponto de montagem automática é acessado.
+target
+ - Agrupamento de unidades, de forma que sejam controladas em conjunto. A unidade multi-user.target, por exemplo, agrega as unidades necessárias ao ambiente multi-usuário. É correspondente ao nível de execução número 5 em um ambiente controlado por SysV.
+snapshot
+ - É semelhante à unidade target. Apenas aponta para outras unidades
