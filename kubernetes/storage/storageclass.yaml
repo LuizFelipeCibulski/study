@@ -1,0 +1,43 @@
+## StorafeClass
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-storage
+  annotations: 
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: rancher.io/local-path
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+# provisioner: local-provisioner para testes locais
+# reclaimPolicy: Comportamento apos o pvc ser excluido
+# volumeBindingMode: Só vai ser alocando quando um pod consumir do PVC
+---
+## Persistent Volume Claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: local-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: local-storage
+---
+## Pod usando PVC
+apiVersion: v1
+kind: Pod
+metadata:
+  name: local-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    volumeMounts:
+    - name: local-storage
+      mountPath: /usr/share/nginx/html
+  volumes:
+  - name: local-storage
+    persistentVolumeClaim:
+      claimName: local-pvc

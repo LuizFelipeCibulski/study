@@ -1,0 +1,44 @@
+## Storage Classes Kubernetes
+# StorageClass define diferentes tipos de armazenamento que podem ser usados para provisionar volumes dinâmicos
+# Provisioners: Mecanismo responsável por provisionar o armazenamento (kubernetes.io/aws-ebs) | (kubernetes.io/gce-pd)
+# ReclaimPolicy: O que vai acontecer com o volume quando ele não for mais utilizado
+# -> Retain: O volume é mantido após op uso e precisa ser apagado manualmente.
+# -> Delete: O volume é deletado automaticamente quando o PVC (Persistent Volume Claim) é deletado
+# Parameters: Configurações específicas do provedor de armazenamento, como o tipo de disco ou a região
+# AllowVolumeExpansion: Pode ou não expandir o volume após a criação
+# Exemplo:
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-storage
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Delete
+AllowVolumeExpansion: true
+---
+## Persistent Volumes (PVs)
+# Um PV é uma unidade de armazenamento no Kubernetes que foi provisionada de forma estática ou dinâmica
+# Independente do ciclo de vida dos pods, Pods podem ser deletados e recriados, mas o PV ainda permanece disponível para ser reutilizado
+# Viculado a um Persistent Volume Clam (PVC)
+# Pvs possuem ReclaimPolicy que pode ser configurada para liberar ou reter o volume quando ele não for mais necessário.
+# pode ser feito deploy de forma dinâmica (StorageClass) ou estática (manualmente)
+###
+## Persistent Volume Claims (PVCs)
+# Um PVC pe a solicitação feita por  um pod para obter um volume persistente
+# ele solicita um volume com características (tamanho e classe de armazenamento)
+# Exemplos
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mypvc
+spec:
+  resources:
+    requests:
+      storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+---
