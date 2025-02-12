@@ -1,0 +1,3 @@
+## Persistent Volume Claim (PVC)
+# Solicitação de armazenamento feito por usuário ou um pod no kubernetes
+# Abstrai a complexidade de armazenamento de disco físico 
