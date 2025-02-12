@@ -1,0 +1,21 @@
+## Volume Mode
+# 2 modos de como os dados vão ser armazenados em um volume 
+# -> Block: Nesse modo os dados são gravados diretamente no dispositovo de armazenamento, sem que o sistema de arquivos seja montado.
+# Útil para aplicações que precisam de acessos em nível de bloco, como banco de dados 
+# -> Filesystem (default): Montado como um sistema de arquivo, modo padrão do PV, kubernetes monta um sistema de arquivos no volume
+
+## Access Modes
+# ReadWriteOnce (RWO): Montado como leitura e gravação por APENAS UM nó ao mesmo tempo. apenas um pod pode acessar e gravar no volume
+# ReadOnlyMany (ROX): Motando como leitura por vários nós. compartilhar volume somente para leitura entre vários pods
+# ReadWriteMany (RWX): Leitura e gravação por vários nós ao mesmo tempo. 
+# ReadWriteOncePod (RWOP): Montado como leitura e gravação por apenas um pod, porém em qualquer nó do cluster
+
+## Reclaim Policies
+# Retain: Volume é removido de um pod e não está mais sendo utilizado, ele é mantido no estado atual
+# Recycle(obsoleto): antes do 1.11 era possivel que o volume fosse limpo automaticamente para reutilização
+# Delete: Quando o volume é desanexado e não está mais sendo utilizado ele é exluído automaticamente 
+
+## Resumo
+# Volume Mode: Define como os dados são armazenados
+# Access Modes: Define como o volume pode ser acessado
+# reclaim Policies: define o que acontece com o volume após ele ser desanexado
