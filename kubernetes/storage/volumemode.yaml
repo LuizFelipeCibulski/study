@@ -1,6 +1,6 @@
 ## Volume Mode
 # 2 modos de como os dados vão ser armazenados em um volume 
-# -> Block: Nesse modo os dados são gravados diretamente no dispositovo de armazenamento, sem que o sistema de arquivos seja montado.
+# -> Block: Nesse modo os dados são gravados diretamente no dispositivo de armazenamento, sem que o sistema de arquivos seja montado.
 # Útil para aplicações que precisam de acessos em nível de bloco, como banco de dados 
 # -> Filesystem (default): Montado como um sistema de arquivo, modo padrão do PV, kubernetes monta um sistema de arquivos no volume
 

@@ -1,0 +1,65 @@
+## Persistent Volume Claim
+# PVC é uma forma de pedir | reibindicasr recursos de armazenamento dentro de um cluster Kubernetes
+# Relação PVc PV e Storage Class
+# Persistent Volume (PV): O PV representa o recurso físico de armazenamento no cluster, disco ou NFS 
+# Persistent Volume Claim (PVC): O PVC é como uma solicitação de armazenamento. Descreve quantidade de armazenamento necessária 
+# e características, quando um pvc é criado o kubernetes tenta associá-lo a um PV que atenda a esses critérios
+# StorageClass: Define a classe de armazenamento que deve ser utilizada para provisionar o volume. 
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mypv
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-path
+  hostPath:
+    path: /tmp/teste
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mypvc
+spec:
+  resources:
+    requests:
+      storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: nginxmyapp
+        image: tibursio/helloworld-nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        volumeMounts:
+          - name: teste
+            mountPath: /tmp
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: teste
+        persistentVolumeClaim: 
+          claimName: mypvc
+      
