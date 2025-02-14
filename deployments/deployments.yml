@@ -1,0 +1,56 @@
+## Deployments
+# Permitem gerenciar a implantacao e a atualização de aplicativos, garante que o número desejado de pods esteja sempre em execucao 
+# Para criar um deployment é possivel usar o kubectl e um arquivo:
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: tibursio/helloworld-nginx
+        ports:
+        - containerPort: 80
+---
+## Rolling Updates
+# É uma estrategia para atualizar as versões dos pods sem causar downtime. Durente um rolling Update, o kubernetes atualiza gradualmente os pods
+# Como funciona: 
+# O Kubernetes cria um novo pod com a nova versão
+# Ele vai verificando a saúde dos novos pods. Se um novo pod estiver saudavel, ele desativa um pod antigo
+# Esse processo continua até que todos os pods estejam atualizados
+
+# Para acompanhar o progresso de um rolling Update
+# kubectl rollout status <deployment>
+
+# Controlando o Update
+# maxSurge: Numero maximo de pods que podem ser criados alem das replicas desejadas
+# maxUnavailable: Numero maximo de pods que podem ficar indisponiveis durante o update
+# Exemplo de yaml:
+#spec:
+#  strategy:
+#    rollingUpdate:
+#      maxSurge: 1
+#     maxUnavailable: 1
+
+## Rollback
+# Caso um problema ocorrer você pode reverter para a versão anterior dos pods
+# kubectl rollout undo <deployment>
+# Esse comando ira desfazer o ultimo update e retorna a versão anterior do deployment 
+
+# Caso você tenha multiplas versões de rollback, pode especificar qual ver~soa deseja reverter:
+# kubectl rollout undo <deployment> --to-revision=1
+
+# Para verificar o historico de versão
+# kubectl rollout history <deployment>
+
+#
