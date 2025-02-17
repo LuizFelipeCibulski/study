@@ -1,0 +1,70 @@
+## ConfigMaps 
+# Configmaps no kubernetes são objetos que permitem armazenar dados de configuração em pares chave-valor
+# Usados para seoara a configuração da aplicação do própprio código, permitindo que as aplicaçõ9es
+# se comportem de maira flexível em diferentes ambientes
+
+# Quando usar? 
+# Para armazenar variaveis de ambiente que suas aplicações precisam
+# Para fornecer arquivos de configuração diretamente para um container
+# Para manter configurações de aplicativos ou serviçois que podem ser modificadas sem a necessidade de alterar a imagem do container ou código da aplicação 
+
+# Como criar
+# Usando yaml:
+---
+ApiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmaptest
+data:
+  chave1: valor1
+  chave2: valor2
+---
+# Usando o kubectl:
+kubectl create configmap configmapteste --from-literal=chave1=valor1 --from-literal=chave2=valor2
+
+# apartir de um arquivo:
+kubectl create configmap configmapteste --from-file=meuarquivo.txt
+
+# Como usar um configmap em um pod
+# Como variáveis de ambiente:
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-com-configmap
+spec:
+  containers:
+  - name: meu-container
+    image: minha-imagem
+    envFrom:
+    - configMapRef:
+        name: configmaptest
+---
+# No exemplo a cima todas as chaves e valores do configmap serão passados como variáveis de ambiente para o container
+
+# como volumes (arquivo de configuração)
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-com-configmap
+spec:
+  containers:
+  - name: meu-container
+    image: minha-imagem
+    volumeMounts:
+    - name: config-volume
+      mountPath: /etc/config
+  volumes:
+  - name: config-volume
+    configMap:
+      name: minha-configmap
+---
+# No exemplo a cima o ConfigMaps sera montado em /etc/config dentro do container e cada chave no ConfigMap Será um arquivo dentro desse diretorio
+
+# Atualizar um configmap
+kubectl edit configmap configmaptest
+
+# Se for yaml:
+kubectl apply -f configmap.yaml
+
