@@ -68,3 +68,22 @@ kubectl edit configmap configmaptest
 # Se for yaml:
 kubectl apply -f configmap.yaml
 
+
+###
+# ConfigMap e Secrets, ambos são objetos do kubernetes
+# Arquivos de configuração, ficam dentro de config map
+# Usuario, senha, ou banco de dados, ficam dentro do secret
+# Secret vai retonar base64, encodado em base64
+# 
+
+## ConfigMap multi linha: 
+data:
+  Corefile: |
+    luiz.me {
+    log
+    erros
+    loadbalancer
+    cache 30
+    reload
+    }
+
