@@ -35,7 +35,8 @@ spec:
                 key: virtual_host
         volumeMounts:
         - name: index-html
-          mountPath: "/usr/share/nginx/html"
+          mountPath: "/usr/share/nginx/html/index.html"
+          subPath: "index.html"
           readOnly: true
       volumes: 
         - name: index-html
