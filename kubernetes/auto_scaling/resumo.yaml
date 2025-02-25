@@ -68,3 +68,9 @@ spec:
   - port: 80
     targetPort: 80
 
+## Stabilization window
+# Muito mais usada para o scale down, do que o up.
+# Padrão 300 segundos = 5 minutos
+# Ajuda a não causar desrupção da aplicação
+# Quando estabiliza por 5 minutos ele começa a diminuir o número de replicas
+# Pode ser alterado na config do hpa
