@@ -74,3 +74,10 @@ spec:
 # Ajuda a não causar desrupção da aplicação
 # Quando estabiliza por 5 minutos ele começa a diminuir o número de replicas
 # Pode ser alterado na config do hpa
+
+## VPA
+# É tercerizado, https://github.com/kubernetes/autoscaler
+# Recommender = fica analisando o deploy, para a tomada de decisão 
+# Updater = atualiza os pods que não estão com a nova config do recommender
+# Admission = Recebe os eventos, atua baseado nos eventos. 
+# Pelo menos 2 replicas para que o vpa funcione
