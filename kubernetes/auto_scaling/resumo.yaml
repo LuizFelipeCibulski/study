@@ -81,3 +81,38 @@ spec:
 # Updater = atualiza os pods que não estão com a nova config do recommender
 # Admission = Recebe os eventos, atua baseado nos eventos. 
 # Pelo menos 2 replicas para que o vpa funcione
+
+
+## Resumo: 
+# os comportamentos default do HPa são controlados pelo kube-controller. Você pode filtrar por --horizontal-pod-autoscaler
+# kube-controller-manager
+# per-pod resource metrics -> A forma default calculando a média do uso dos recursos de compute do pod como todo (mesmo tendo mais de um container)
+# per-pod custom metrics -> Pode ser integrado com Prometheus para uso de outras métricas
+# Essas são as APIs utilizadas pelo HPA:
+# metrics.k8s.io -> A principal, implementada pelo metrics-server
+# custom.metrics.k8s.io
+# external.metrics.k8s.io
+# Ou seja, é necessário fazer o deploy do metrics-server
+# Entendo o algoritmo
+# Existe um algoritmo que é usado para definir se será escalado ou não: 
+# desiredReplicas = ceil[currentReplicas * ( currentMetricValue / desiredMetricValue )]
+# ceil -> função arredonda o valor para inteiro sempre jogando para cima
+# Exemplo: X = 10.2, então o valor vai ser 11
+# currentReplicas, o número de replicas atual do deployment
+# currentMetricValue, é o ponto de escala que foi definido no HPA
+
+## Stabilization Window
+# Usado para evitar que os pods flutuem demais escalando e "deescalando". Por default,
+# depois que o pod escalar, vai demorar mais ou menos 5 minutos para estabilizar a janela, até que então parte deles possa ser deescalado.
+# É possivel alterar a janela default no kube-controller ou sobrescrever o valor no deployment
+
+# VPA:
+# Admission -> recebe os hoojs quando um pod é criado e faz o patch no request/limits
+# updater -> Atualiza os pods em tempo real fazendo o evicting
+# recommender -> verifica a utilização de recursos e atualiza os VPAs
+
+# Tanto o deployment quanto o replicaset não serão editados
+# No momento que um pod é criado, há um mutatingwebhook que envia para o admission-controller, e então ocorre a mudança dos requests.
+# ele será atualizado por meio do updater
+
+# 
